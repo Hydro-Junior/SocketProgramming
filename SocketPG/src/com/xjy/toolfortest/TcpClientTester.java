@@ -1,7 +1,7 @@
-package com.xjy.test;
+package com.xjy.toolfortest;
 
 /**
- * ×Ô¶¨ÒåµÄ¿Í»§¶Ë²âÊÔÀà
+ * è‡ªåˆ¶çš„å®¢æˆ·ç«¯GUIæµ‹è¯•å·¥å…·ï¼Œå¯å‘é€è‡ªå®šä¹‰çš„æŠ¥æ–‡åºåˆ—
  */
 import java.awt.Color;
 import java.awt.EventQueue;
@@ -32,42 +32,42 @@ import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 
 public class TcpClientTester extends JFrame {
-	// Ä¬ÈÏIPºÍ¶Ë¿Ú
+	// é»˜è®¤IPå’Œç«¯å£
 	private String serverIP = "127.0.0.1";
 	private int port = 8886;
-	private String serialNum;// Ã¿´ÎÆô¶¯Ëæ»úÉú³É10Î»µÄĞòÁĞºÅ
-	private String sendSerialNum;// Ìí¼ÓÁË·½¿òµÄĞòÁĞºÅ
+	private String serialNum;// æ¯æ¬¡å¯åŠ¨éšæœºç”Ÿæˆ10ä½çš„åºåˆ—å·
+	private String sendSerialNum;// æ·»åŠ äº†æ–¹æ¡†çš„åºåˆ—å·
 
-	// ¹Ì¶¨Êı¾İ
-	private static final String HEAD = "HEADHEAD";// ±¨ÎÄÍ·
-	private static final String TAIL = "TAILTAIL";// ±¨ÎÄÎ²
+	// å›ºå®šæ•°æ®
+	private static final String HEAD = "HEADHEAD";// æŠ¥æ–‡å¤´
+	private static final String TAIL = "TAILTAIL";// æŠ¥æ–‡å°¾
 
-	private Socket sc;// ¿Í»§¶ËÌ×½Ó×Ö
-	private boolean connectState = true;// Ò»¿ªÊ¼Î´Á¬½ÓÉÏ
-	private boolean bConnected = true;// ±íÊ¾´¦ÓÚÁ¬½Ó×´Ì¬
-	private DataOutputStream dos = null;// Êä³öÁ÷Ğ´³öÏûÏ¢
-	private DataInputStream dis = null;// ÊäÈëÁ÷¶ÁÈ¡ÏûÏ¢
+	private Socket sc;// å®¢æˆ·ç«¯å¥—æ¥å­—
+	private boolean connectState = true;// ä¸€å¼€å§‹æœªè¿æ¥ä¸Š
+	private boolean bConnected = true;// è¡¨ç¤ºå¤„äºè¿æ¥çŠ¶æ€
+	private DataOutputStream dos = null;// è¾“å‡ºæµå†™å‡ºæ¶ˆæ¯
+	private DataInputStream dis = null;// è¾“å…¥æµè¯»å–æ¶ˆæ¯
 	private Thread receiveThread;
 	
-	private JPanel contentPane;// ×ÜÈİÆ÷
-	private JTextField tf_IP;// ÊäÈë·şÎñ¶ËIP
-	private JTextField tf_Port;// ÊäÈë·şÎñ¶Ë¶Ë¿Ú
-	private JLabel lb_CSN;// ¿Í»§¶ËĞòÁĞºÅ±êÇ©
+	private JPanel contentPane;// æ€»å®¹å™¨
+	private JTextField tf_IP;// è¾“å…¥æœåŠ¡ç«¯IP
+	private JTextField tf_Port;// è¾“å…¥æœåŠ¡ç«¯ç«¯å£
+	private JLabel lb_CSN;// å®¢æˆ·ç«¯åºåˆ—å·æ ‡ç­¾
 
-	private JButton btn_Connect;// Á¬½Ó
-	private JButton btn_DisConnect;// ¶Ï¿ªÁ¬½Ó
-	private JButton btn_MakeHead;// Ìí¼Ó±¨ÎÄÍ·
-	private JButton btn_MakeTail;// Ìí¼Ó±¨ÎÄÎ²
-	private JButton btn_FullFragment;// Ìí¼ÓÍêÕû±¨ÎÄ
-	private JButton bt_Data;// Ìí¼ÓÊı¾İ
-	private JButton btn_Send;// ·¢ËÍ
-	private JTextArea textArea_Send;// ÏÔÊ¾Òª·¢ËÍµÄ±¨ÎÄ
-	private JTextArea textArea_Receive;// ÏÔÊ¾½ÓÊÕµÄ±¨ÎÄ
-	private JLabel lb_SerialNum;// ÏÔÊ¾¿Í»§¶ËĞòÁĞºÅ
-	private JLabel lb_connect;// ÓÒÏÂ½ÇÁ¬½ÓÏÔÊ¾
-	private JLabel lb_State;// Á¬½Ó×´Ì¬
-	private JButton btn_ClearSend;// Çå¿Õ·¢ËÍ´°¿Ú
-	private JButton btn_clearReceive;// Çå¿Õ½ÓÊÕ´°¿Ú
+	private JButton btn_Connect;// è¿æ¥
+	private JButton btn_DisConnect;// æ–­å¼€è¿æ¥
+	private JButton btn_MakeHead;// æ·»åŠ æŠ¥æ–‡å¤´
+	private JButton btn_MakeTail;// æ·»åŠ æŠ¥æ–‡å°¾
+	private JButton btn_FullFragment;// æ·»åŠ å®Œæ•´æŠ¥æ–‡
+	private JButton bt_Data;// æ·»åŠ æ•°æ®
+	private JButton btn_Send;// å‘é€
+	private JTextArea textArea_Send;// æ˜¾ç¤ºè¦å‘é€çš„æŠ¥æ–‡
+	private JTextArea textArea_Receive;// æ˜¾ç¤ºæ¥æ”¶çš„æŠ¥æ–‡
+	private JLabel lb_SerialNum;// æ˜¾ç¤ºå®¢æˆ·ç«¯åºåˆ—å·
+	private JLabel lb_connect;// å³ä¸‹è§’è¿æ¥æ˜¾ç¤º
+	private JLabel lb_State;// è¿æ¥çŠ¶æ€
+	private JButton btn_ClearSend;// æ¸…ç©ºå‘é€çª—å£
+	private JButton btn_clearReceive;// æ¸…ç©ºæ¥æ”¶çª—å£
 	private JScrollPane scrollPane_rec;
 	private JTextField tf_sequence;
 	
@@ -93,11 +93,11 @@ public class TcpClientTester extends JFrame {
 	 * initialize the parameters
 	 */
 	public void init() {
-		// Éú³ÉËæ»ú¿Í»§¶ËĞòÁĞºÅ
+		// ç”Ÿæˆéšæœºå®¢æˆ·ç«¯åºåˆ—å·
 		serialNum = getFixlenthString(6);
 		sendSerialNum = "[" + serialNum + "]";
-		this.lb_SerialNum.setText(serialNum);// ÉèÖÃĞòÁĞºÅÏÔÊ¾±êÇ©
-		this.setTitle("¿Í»§¶ËĞòÁĞºÅ£º" + sendSerialNum);// Îª±êÌâÌí¼Ó¿Í»§¶ËĞòÁĞºÅ
+		this.lb_SerialNum.setText(serialNum);// è®¾ç½®åºåˆ—å·æ˜¾ç¤ºæ ‡ç­¾
+		this.setTitle("å®¢æˆ·ç«¯åºåˆ—å·ï¼š" + sendSerialNum);// ä¸ºæ ‡é¢˜æ·»åŠ å®¢æˆ·ç«¯åºåˆ—å·
 
 		registerListener();
 	}
@@ -106,23 +106,23 @@ public class TcpClientTester extends JFrame {
 	 * register event listeners for some buttons
 	 */
 	public void registerListener() {
-		// ÎªÁ¬½Ó°´Å¥×¢²áÊÂ¼ş
+		// ä¸ºè¿æ¥æŒ‰é’®æ³¨å†Œäº‹ä»¶
 		btn_Connect.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				connect();
-				receiveThread = new Thread(new InfoGetter());//½ÓÊÕÏß³Ì
+				receiveThread = new Thread(new InfoGetter());//æ¥æ”¶çº¿ç¨‹
 				receiveThread.start();
 			}
 		});
-		// Îª¶Ï¿ª°´Å¥×¢²áÊÂ¼ş
+		// ä¸ºæ–­å¼€æŒ‰é’®æ³¨å†Œäº‹ä»¶
 		btn_DisConnect.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				disconnect();
 			}
 		});
-		// Îª·¢ËÍ°´Å¥×¢²áÊÂ¼ş
+		// ä¸ºå‘é€æŒ‰é’®æ³¨å†Œäº‹ä»¶
 		btn_Send.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -131,35 +131,35 @@ public class TcpClientTester extends JFrame {
 				textArea_Send.setText("");
 			}
 		});
-		// Îªsend·½µÄÇå¿Õ°´Å¥×¢²áÊÂ¼ş
+		// ä¸ºsendæ–¹çš„æ¸…ç©ºæŒ‰é’®æ³¨å†Œäº‹ä»¶
 		btn_ClearSend.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				textArea_Send.setText("");
 			}
 		});
-		// Îªsend·½µÄÇå¿Õ°´Å¥×¢²áÊÂ¼ş
+		// ä¸ºsendæ–¹çš„æ¸…ç©ºæŒ‰é’®æ³¨å†Œäº‹ä»¶
 		btn_clearReceive.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				textArea_Receive.setText("");
 			}
 		});
-		// Éú³É±¨ÎÄÍ·
+		// ç”ŸæˆæŠ¥æ–‡å¤´
 		btn_MakeHead.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				textArea_Send.append(HEAD + sendSerialNum);
 			}
 		});
-		// Éú³É±¨ÎÄÎ²
+		// ç”ŸæˆæŠ¥æ–‡å°¾
 		btn_MakeTail.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				textArea_Send.append(TAIL);
 			}
 		});
-		//Éú³ÉËæ»ú³¤ÕûÊı
+		//ç”Ÿæˆéšæœºé•¿æ•´æ•°
 		bt_Data.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -170,7 +170,7 @@ public class TcpClientTester extends JFrame {
 				textArea_Send.append(sequence + randomStr);
 			}
 		});
-		//Éú³ÉÍêÕûÖ¡
+		//ç”Ÿæˆå®Œæ•´å¸§
 		btn_FullFragment.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -191,7 +191,7 @@ public class TcpClientTester extends JFrame {
 	public TcpClientTester() {
 		setResizable(false);
 
-		setFont(new Font("Î¢ÈíÑÅºÚ", Font.BOLD, 16));
+		setFont(new Font("å¾®è½¯é›…é»‘", Font.BOLD, 16));
 		setTitle("\u5BA2\u6237\u7AEF\u5E8F\u5217\u53F7");
 		setBackground(Color.GRAY);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -204,31 +204,31 @@ public class TcpClientTester extends JFrame {
 		contentPane.setLayout(null);
 
 		btn_Connect = new JButton("\u8FDE   \u63A5");
-		btn_Connect.setFont(new Font("ĞÂËÎÌå", Font.PLAIN, 12));
+		btn_Connect.setFont(new Font("æ–°å®‹ä½“", Font.PLAIN, 12));
 		btn_Connect.setBackground(SystemColor.controlHighlight);
 		btn_Connect.setBounds(409, 27, 93, 23);
 		contentPane.add(btn_Connect);
 
 		btn_DisConnect = new JButton("\u65AD   \u5F00");
-		btn_DisConnect.setFont(new Font("ĞÂËÎÌå", Font.PLAIN, 12));
+		btn_DisConnect.setFont(new Font("æ–°å®‹ä½“", Font.PLAIN, 12));
 		btn_DisConnect.setBackground(SystemColor.controlHighlight);
 		btn_DisConnect.setBounds(409, 73, 93, 23);
 		contentPane.add(btn_DisConnect);
 
 		btn_MakeHead = new JButton("\u751F \u6210 \u5E27 \u5934");
-		btn_MakeHead.setFont(new Font("ĞÂËÎÌå", Font.PLAIN, 12));
+		btn_MakeHead.setFont(new Font("æ–°å®‹ä½“", Font.PLAIN, 12));
 		btn_MakeHead.setBackground(SystemColor.controlHighlight);
 		btn_MakeHead.setBounds(409, 179, 109, 23);
 		contentPane.add(btn_MakeHead);
 
 		btn_MakeTail = new JButton("\u751F \u6210 \u5E27 \u5C3E");
-		btn_MakeTail.setFont(new Font("ĞÂËÎÌå", Font.PLAIN, 12));
+		btn_MakeTail.setFont(new Font("æ–°å®‹ä½“", Font.PLAIN, 12));
 		btn_MakeTail.setBackground(SystemColor.controlHighlight);
 		btn_MakeTail.setBounds(409, 212, 109, 23);
 		contentPane.add(btn_MakeTail);
 
 		btn_FullFragment = new JButton("\u751F \u6210 \u5B8C \u6574 \u5E27");
-		btn_FullFragment.setFont(new Font("ĞÂËÎÌå", Font.PLAIN, 12));
+		btn_FullFragment.setFont(new Font("æ–°å®‹ä½“", Font.PLAIN, 12));
 		btn_FullFragment.setBackground(SystemColor.controlHighlight);
 		btn_FullFragment.setBounds(409, 295, 124, 34);
 		contentPane.add(btn_FullFragment);
@@ -245,20 +245,20 @@ public class TcpClientTester extends JFrame {
 		lb_IP.setForeground(Color.WHITE);
 		lb_IP.setBounds(10, 20, 31, 22);
 		panel_Info.add(lb_IP);
-		lb_IP.setFont(new Font("Î¢ÈíÑÅºÚ", Font.PLAIN, 16));
+		lb_IP.setFont(new Font("å¾®è½¯é›…é»‘", Font.PLAIN, 16));
 
 		JLabel lblPort = new JLabel("Port\uFF1A");
 		lblPort.setForeground(Color.WHITE);
 		lblPort.setBounds(10, 52, 48, 22);
 		panel_Info.add(lblPort);
-		lblPort.setFont(new Font("Î¢ÈíÑÅºÚ", Font.PLAIN, 16));
+		lblPort.setFont(new Font("å¾®è½¯é›…é»‘", Font.PLAIN, 16));
 
 		tf_IP = new JTextField();
 		tf_IP.setBackground(Color.LIGHT_GRAY);
 		tf_IP.setHorizontalAlignment(SwingConstants.RIGHT);
 		tf_IP.setBounds(91, 17, 156, 28);
 		panel_Info.add(tf_IP);
-		tf_IP.setFont(new Font("Î¢ÈíÑÅºÚ", Font.PLAIN, 16));
+		tf_IP.setFont(new Font("å¾®è½¯é›…é»‘", Font.PLAIN, 16));
 		tf_IP.setText("127.0.0.1");
 		tf_IP.setColumns(10);
 
@@ -267,7 +267,7 @@ public class TcpClientTester extends JFrame {
 		tf_Port.setHorizontalAlignment(SwingConstants.RIGHT);
 		tf_Port.setBounds(133, 49, 114, 28);
 		panel_Info.add(tf_Port);
-		tf_Port.setFont(new Font("Î¢ÈíÑÅºÚ", Font.PLAIN, 16));
+		tf_Port.setFont(new Font("å¾®è½¯é›…é»‘", Font.PLAIN, 16));
 		tf_Port.setText("8886");
 		tf_Port.setColumns(10);
 
@@ -275,19 +275,19 @@ public class TcpClientTester extends JFrame {
 		lb_CSN.setForeground(Color.WHITE);
 		lb_CSN.setBounds(10, 81, 164, 22);
 		panel_Info.add(lb_CSN);
-		lb_CSN.setFont(new Font("Î¢ÈíÑÅºÚ", Font.PLAIN, 16));
+		lb_CSN.setFont(new Font("å¾®è½¯é›…é»‘", Font.PLAIN, 16));
 
 		lb_SerialNum = new JLabel("");
 		lb_SerialNum.setHorizontalAlignment(SwingConstants.LEFT);
 		lb_SerialNum.setForeground(Color.WHITE);
-		lb_SerialNum.setFont(new Font("Î¢ÈíÑÅºÚ", Font.ITALIC, 16));
+		lb_SerialNum.setFont(new Font("å¾®è½¯é›…é»‘", Font.ITALIC, 16));
 		lb_SerialNum.setBounds(10, 108, 130, 22);
 		panel_Info.add(lb_SerialNum);
 
 		lb_State = new JLabel("\u672A \u8FDE \u63A5");
 		lb_State.setHorizontalAlignment(SwingConstants.CENTER);
 		lb_State.setForeground(Color.WHITE);
-		lb_State.setFont(new Font("Î¢ÈíÑÅºÚ", Font.ITALIC, 16));
+		lb_State.setFont(new Font("å¾®è½¯é›…é»‘", Font.ITALIC, 16));
 		lb_State.setBounds(133, 108, 130, 22);
 		panel_Info.add(lb_State);
 
@@ -313,12 +313,12 @@ public class TcpClientTester extends JFrame {
 		JLabel lb_toSend = new JLabel("MessageToSend");
 		lb_toSend.setForeground(new Color(220, 220, 220));
 		lb_toSend.setHorizontalAlignment(SwingConstants.LEFT);
-		lb_toSend.setFont(new Font("Î¢ÈíÑÅºÚ", Font.BOLD | Font.ITALIC, 15));
+		lb_toSend.setFont(new Font("å¾®è½¯é›…é»‘", Font.BOLD | Font.ITALIC, 15));
 		lb_toSend.setBounds(10, 153, 251, 28);
 		contentPane.add(lb_toSend);
 
 		btn_Send = new JButton("\u53D1   \u9001");
-		btn_Send.setFont(new Font("ĞÂËÎÌå", Font.PLAIN, 12));
+		btn_Send.setFont(new Font("æ–°å®‹ä½“", Font.PLAIN, 12));
 		btn_Send.setBackground(SystemColor.controlHighlight);
 		btn_Send.setBounds(409, 367, 109, 23);
 		contentPane.add(btn_Send);
@@ -326,7 +326,7 @@ public class TcpClientTester extends JFrame {
 		JLabel lb_Receive = new JLabel("MessageReceived");
 		lb_Receive.setHorizontalAlignment(SwingConstants.LEFT);
 		lb_Receive.setForeground(new Color(211, 211, 211));
-		lb_Receive.setFont(new Font("Î¢ÈíÑÅºÚ", Font.BOLD | Font.ITALIC, 15));
+		lb_Receive.setFont(new Font("å¾®è½¯é›…é»‘", Font.BOLD | Font.ITALIC, 15));
 		lb_Receive.setBounds(10, 284, 251, 28);
 		contentPane.add(lb_Receive);
 
@@ -339,7 +339,7 @@ public class TcpClientTester extends JFrame {
 		contentPane.add(textArea_Receive);
 
 		bt_Data = new JButton("\u751F \u6210 \u6570 \u636E");
-		bt_Data.setFont(new Font("ĞÂËÎÌå", Font.PLAIN, 12));
+		bt_Data.setFont(new Font("æ–°å®‹ä½“", Font.PLAIN, 12));
 		bt_Data.setBackground(SystemColor.controlHighlight);
 		bt_Data.setBounds(409, 251, 109, 23);
 		contentPane.add(bt_Data);
@@ -351,14 +351,14 @@ public class TcpClientTester extends JFrame {
 		contentPane.add(lb_connect);
 
 		btn_ClearSend = new JButton("\u6E05  \u7A7A");
-		btn_ClearSend.setFont(new Font("ĞÂËÎÌå", Font.PLAIN, 12));
+		btn_ClearSend.setFont(new Font("æ–°å®‹ä½“", Font.PLAIN, 12));
 		btn_ClearSend.setBackground(SystemColor.controlHighlight);
 		btn_ClearSend.setForeground(SystemColor.windowText);
 		btn_ClearSend.setBounds(263, 152, 93, 23);
 		contentPane.add(btn_ClearSend);
 
 		btn_clearReceive = new JButton("\u6E05  \u7A7A");
-		btn_clearReceive.setFont(new Font("ĞÂËÎÌå", Font.PLAIN, 12));
+		btn_clearReceive.setFont(new Font("æ–°å®‹ä½“", Font.PLAIN, 12));
 		btn_clearReceive.setBackground(SystemColor.controlHighlight);
 		btn_clearReceive.setBounds(263, 284, 93, 23);
 		contentPane.add(btn_clearReceive);
@@ -375,14 +375,14 @@ public class TcpClientTester extends JFrame {
 		
 		JLabel lb_sequence = new JLabel("\u5E27\u5E8F\u53F7\uFF1A");
 		lb_sequence.setForeground(Color.LIGHT_GRAY);
-		lb_sequence.setFont(new Font("ËÎÌå", Font.PLAIN, 12));
+		lb_sequence.setFont(new Font("å®‹ä½“", Font.PLAIN, 12));
 		lb_sequence.setBounds(409, 137, 62, 22);
 		contentPane.add(lb_sequence);
 		
 		tf_sequence = new JTextField();
 		tf_sequence.setText("00");
 		tf_sequence.setHorizontalAlignment(SwingConstants.CENTER);
-		tf_sequence.setFont(new Font("Î¢ÈíÑÅºÚ", Font.PLAIN, 16));
+		tf_sequence.setFont(new Font("å¾®è½¯é›…é»‘", Font.PLAIN, 16));
 		tf_sequence.setColumns(10);
 		tf_sequence.setBackground(Color.LIGHT_GRAY);
 		tf_sequence.setBounds(459, 135, 59, 24);
@@ -392,16 +392,16 @@ public class TcpClientTester extends JFrame {
 	/**
 	 * Help Methods
 	 */
-	// ·µ»Ø¹Ì¶¨³¤¶ÈµÄËæ»úĞòÁĞ
+	// è¿”å›å›ºå®šé•¿åº¦çš„éšæœºåºåˆ—
 	private static String getFixlenthString(int strLen) {
 		Random rd = new Random();
-		double pross = ((1 + rd.nextDouble()) * Math.pow(10, strLen));// »ñÈ¡Ëæ»úÊı
-		String fixedLenthString = String.valueOf(pross);// ×ª»¯Îª×Ö·û´®
+		double pross = ((1 + rd.nextDouble()) * Math.pow(10, strLen));// è·å–éšæœºæ•°
+		String fixedLenthString = String.valueOf(pross);// è½¬åŒ–ä¸ºå­—ç¬¦ä¸²
 		return fixedLenthString.substring(1, strLen + 1);
 	}
 
 	/**
-	 * ÓëÁ¬½ÓÏà¹ØµÄ·½·¨
+	 * ä¸è¿æ¥ç›¸å…³çš„æ–¹æ³•
 	 *
 	 */
 	public void connect() {
@@ -410,21 +410,21 @@ public class TcpClientTester extends JFrame {
 			try {
 				serverIP = this.tf_IP.getText();
 				port = Integer.parseInt(this.tf_Port.getText());
-				//lb_State.setText("ÕıÔÚÁ¬½Ó...");
+				//lb_State.setText("æ­£åœ¨è¿æ¥...");
 				sc = new Socket(this.serverIP, this.port);
-				dos = new DataOutputStream(sc.getOutputStream());// ³õÊ¼»¯Êä³öÁ÷
-				dis = new DataInputStream(sc.getInputStream());// ³õÊ¼»¯ÊäÈëÁ÷
-				// System.out.println("success to connect the server£¡");
-				lb_connect.setText("³É¹¦Á¬½Ó·şÎñ¶Ë[" + serverIP + ":" + port + "]");
-				lb_State.setText("ÒÑ Á¬ ½Ó");
-				// ¸üĞÂ°´Å¥×´Ì¬
+				dos = new DataOutputStream(sc.getOutputStream());// åˆå§‹åŒ–è¾“å‡ºæµ
+				dis = new DataInputStream(sc.getInputStream());// åˆå§‹åŒ–è¾“å…¥æµ
+				// System.out.println("success to connect the serverï¼");
+				lb_connect.setText("æˆåŠŸè¿æ¥æœåŠ¡ç«¯[" + serverIP + ":" + port + "]");
+				lb_State.setText("å·² è¿ æ¥");
+				// æ›´æ–°æŒ‰é’®çŠ¶æ€
 				btn_Connect.setEnabled(false);
 				tf_IP.setEnabled(false);
 				tf_Port.setEnabled(false);
 				connectState = false;
 			} catch (UnknownHostException e) {
 				e.printStackTrace();
-			} catch (ConnectException e) {// ²¶»ñÁ¬½ÓÒì³££¬²¢³¢ÊÔÖØÁ¬
+			} catch (ConnectException e) {// æ•è·è¿æ¥å¼‚å¸¸ï¼Œå¹¶å°è¯•é‡è¿
 				System.out.println("trying to connect...");
 				try {
 					Thread.sleep(2000);
@@ -443,7 +443,7 @@ public class TcpClientTester extends JFrame {
 		}
 	}
 
-	// ÏûÏ¢¼àÌıÄÚ²¿Àà
+	// æ¶ˆæ¯ç›‘å¬å†…éƒ¨ç±»
 	class InfoGetter implements Runnable {
 		@Override
 		public void run() {
@@ -472,28 +472,28 @@ public class TcpClientTester extends JFrame {
 	public void send(String s) {
 		if(s == null) {return;}
 		try {
-			dos.write(s.getBytes("ASCII"));// ·¢ËÍ×Ö·û´®°´ASCII½âÂë³ÉµÄ×Ö½ÚÁ÷
+			dos.write(s.getBytes("ASCII"));// å‘é€å­—ç¬¦ä¸²æŒ‰ASCIIè§£ç æˆçš„å­—èŠ‚æµ
 		} catch (IOException e) {
-			System.out.println("ÓÉÓÚ²»Ã÷Ô­Òò·¢ËÍÊ§°Ü£¡");
+			System.out.println("ç”±äºä¸æ˜åŸå› å‘é€å¤±è´¥ï¼");
 			e.printStackTrace();
 		}
 	}
 
-	// ¶Ï¿ªÁ¬½Ó´¦Àí
+	// æ–­å¼€è¿æ¥å¤„ç†
 	public void disconnect() {
 		try {
 			if (dos != null)
 				dos.close();
 			if (sc != null)
 				sc.close();
-			// ¸üĞÂÁ¬½Ó×´Ì¬
+			// æ›´æ–°è¿æ¥çŠ¶æ€
 			connectState = true;
-			// ¸üĞÂ°´Å¥×´Ì¬
+			// æ›´æ–°æŒ‰é’®çŠ¶æ€
 			btn_Connect.setEnabled(true);
 			tf_IP.setEnabled(true);
 			tf_Port.setEnabled(true);
-			lb_connect.setText("µ±Ç°Î´Á¬½Ó·şÎñ¶Ë");
-			lb_State.setText("Á¬½ÓÊ§°Ü");
+			lb_connect.setText("å½“å‰æœªè¿æ¥æœåŠ¡ç«¯");
+			lb_State.setText("è¿æ¥å¤±è´¥");
 			receiveThread = null;
 		} catch (IOException e) {
 			e.printStackTrace();

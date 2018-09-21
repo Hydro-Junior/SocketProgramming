@@ -1,41 +1,38 @@
-package com.xjy.test;
-import java.io.CharArrayReader;
+package com.xjy.blocking.chatroom;
 /**
- * ´«Í³×èÈûÊ½socket±à³Ì£¬·şÎñ¶Ë
+ * ä¼ ç»Ÿé˜»å¡å¼socketç¼–ç¨‹ï¼ŒæœåŠ¡ç«¯
  */
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.BindException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.nio.charset.Charset;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
-public class TcpServerTester {
-	ServerSocket ss = null; //·şÎñ¶ËÌ×½Ó×Ö
+public class ChatServer {
+	ServerSocket ss = null; //æœåŠ¡ç«¯å¥—æ¥å­—
 	boolean started = true; 
-	List<Client> clients = new ArrayList<Client>();//´æ´¢ËùÓĞ¿Í»§¶Ë
+	List<Client> clients = new ArrayList<Client>();//å­˜å‚¨æ‰€æœ‰å®¢æˆ·ç«¯
 
-	// Ö÷·½·¨
+	// ä¸»æ–¹æ³•
 	public static void main(String[] args) {
-		new TcpServerTester().start();//¿ªÆôÖ÷¼àÌıÏß³Ì
+		new ChatServer().start();//å¼€å¯ä¸»ç›‘å¬çº¿ç¨‹
 	}
 
 	public void start() {
 		try {
 			try {
 				ss = new ServerSocket(8886);
+				System.out.println("Server has been started!");
 			} catch (BindException e) {
-				System.out.println("¶Ë¿ÚÒÑ¾­±»Õ¼ÓÃ£¡ÇëÏÈ¹Ø±ÕÆäËû·şÎñÆ÷£¡");
+				System.out.println("ç«¯å£å·²ç»è¢«å ç”¨ï¼è¯·å…ˆå…³é—­å…¶ä»–æœåŠ¡å™¨ï¼");
 				System.exit(0);
 			}
-			//²»¶ÏÑ­»·½ÓÊÕ
+			//ä¸æ–­å¾ªç¯æ¥æ”¶
 			while (started) {
-				Client client = new Client(ss.accept());//accept·½·¨·µ»Ø¿Í»§¶ËµÄSocket£¬È»ºó³õÊ¼»¯¿Í»§¶ËÀà
+				Client client = new Client(ss.accept());//acceptæ–¹æ³•è¿”å›å®¢æˆ·ç«¯çš„Socketï¼Œç„¶ååˆå§‹åŒ–å®¢æˆ·ç«¯ç±»
 				clients.add(client);
 				new Thread(client).start();
 			}
@@ -52,31 +49,28 @@ public class TcpServerTester {
 			}
 		}
 	}
-	//Ò»¸ö¿Í»§¶Ë¶ÔÓ¦Ò»¸ö¿Í»§¶Ë´¦ÀíÏß³Ì
+	//ä¸€ä¸ªå®¢æˆ·ç«¯å¯¹åº”ä¸€ä¸ªå®¢æˆ·ç«¯å¤„ç†çº¿ç¨‹
 	class Client implements Runnable {
-		Socket sc = null;//ÓÃÓÚ½ÓÊÜ¿Í»§¶ËÌ×½Ó×Ö
+		Socket sc = null;//ç”¨äºæ¥å—å®¢æˆ·ç«¯å¥—æ¥å­—
 		DataInputStream dis = null;
-		//InputStreamReader isr = null;
 		DataOutputStream dos = null;
 		boolean bConnect = false;
 
 		Client(Socket s) {
-			this.sc = s;//³õÊ¼»¯·şÎñ¶Ë³ÖÓĞµÄ¿Í»§¶ËÌ×½Ó×Ö
+			this.sc = s;//åˆå§‹åŒ–æœåŠ¡ç«¯æŒæœ‰çš„å®¢æˆ·ç«¯å¥—æ¥å­—
 			try {
-				dis = new DataInputStream(sc.getInputStream());//³õÊ¼»¯ÊäÈëÁ÷
-				//isr = new InputStreamReader(sc.getInputStream());
-				dos = new DataOutputStream(sc.getOutputStream());//³õÊ¼»¯Êä³öÁ÷
+				dis = new DataInputStream(sc.getInputStream());//åˆå§‹åŒ–è¾“å…¥æµ
+				dos = new DataOutputStream(sc.getOutputStream());//åˆå§‹åŒ–è¾“å‡ºæµ
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 			System.out.println("A client connected!");
 		}
 		
-		//·¢ËÍ·½·¨
+		//å‘é€æ–¹æ³•
 		public void send(String str) {
 			try {
-				//dos.writeUTF(str);//Êä³öÁ÷£¬ÓÉ·şÎñ¶ËµÄ¿Í»§¶Ë´¦ÀíÏß³Ì·¢ËÍ¸ø¶ÔÓ¦µÄ¿Í»§¶Ë
-				dos.write(str.getBytes("ASCII"));//·¢ËÍ×Ö·û´®°´ASCII½âÂë³ÉµÄ×Ö½ÚÁ÷
+				dos.writeUTF(str);//è¾“å‡ºæµï¼Œç”±æœåŠ¡ç«¯çš„å®¢æˆ·ç«¯å¤„ç†çº¿ç¨‹å‘é€ç»™å¯¹åº”çš„å®¢æˆ·ç«¯
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -88,18 +82,12 @@ public class TcpServerTester {
 
 			while (bConnect) {
 				try {
-					String str = null;
-					byte[] bs = new byte[1024];
-					int len ;
-					if((len=dis.read(bs))>0) {
-						str = new String(bs,0,len,"ASCII");
-					}
+					String str = dis.readUTF();//æ¯ä¸ªå®¢æˆ·ç«¯å¤„ç†ç±»é˜»å¡å¼è¯»å–
 					System.out.println(str);
-					//°Ñ¶Áµ½µÄÏûÏ¢·¢ËÍ¸øËùÓĞµÄ¿Í»§¶Ë
+					//æŠŠè¯»åˆ°çš„æ¶ˆæ¯å‘é€ç»™æ‰€æœ‰çš„å®¢æˆ·ç«¯
 					for (int i = 0; i < clients.size(); i++) {
 						clients.get(i).send(str);
 					}
-
 				} catch (Exception e) {
 					System.out.println("lost a connect with Client!");
 					clients.remove(this);

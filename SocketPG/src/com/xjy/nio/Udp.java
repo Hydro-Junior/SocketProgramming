@@ -11,43 +11,45 @@ import java.util.Iterator;
 import java.util.Scanner;
 
 import org.junit.Test;
+import org.omg.CORBA.TIMEOUT;
 
-public class UdpDemo {
+public class Udp {
+	private static final int TIMEOUT = 6000;
 	@Test
 	public void send() throws IOException {
-		DatagramChannel dc = DatagramChannel.open();//ø™Õ®µ¿
-		dc.configureBlocking(false);//…Ë÷√∑«◊Ë»˚
+		DatagramChannel dc = DatagramChannel.open();//ÂºÄÈÄöÈÅì
+		dc.configureBlocking(false);//ËÆæÁΩÆÈùûÈòªÂ°û
 		
-		ByteBuffer buf = ByteBuffer.allocate(1024);//∑÷≈‰ª∫≥Â«¯
+		ByteBuffer buf = ByteBuffer.allocate(1024);//ÂàÜÈÖçÁºìÂÜ≤Âå∫
 		Scanner sc = new Scanner(System.in);
 		
 		while(sc.hasNext()) {
 			String str = sc.next();
-			buf.put((new Date().toString()+":\n"+str).getBytes());//–¥»Îª∫≥Â«¯
-			//¥Ê-->»° flip
+			buf.put((new Date().toString()+":\n"+str).getBytes());//ÂÜôÂÖ•ÁºìÂÜ≤Âå∫
+			//Â≠ò-->Âèñ flip
 			buf.flip();
-			dc.send(buf,new InetSocketAddress("127.0.0.1", 9898));//¥”ª∫≥Â«¯÷–»°≥ˆ≤¢∑¢ÀÕ
+			dc.send(buf,new InetSocketAddress("127.0.0.1", 9898));//‰ªéÁºìÂÜ≤Âå∫‰∏≠ÂèñÂá∫Âπ∂ÂèëÈÄÅ
 			buf.clear();
 		}
 		dc.close();
 	}
 	@Test
 	public void receive() throws IOException {
-		DatagramChannel dc = DatagramChannel.open();//ø™Õ®µ¿
-		dc.configureBlocking(false);//∑«◊Ë»˚
+		DatagramChannel dc = DatagramChannel.open();//ÂºÄÈÄöÈÅì
+		dc.configureBlocking(false);//ÈùûÈòªÂ°û
 		dc.bind(new InetSocketAddress(9898));
-		Selector selector = Selector.open();//Ω” ’∂À–Ë“™¥Úø™—°‘Ò∆˜
-		dc.register(selector, SelectionKey.OP_READ);//◊¢≤·—°‘Ò∆˜£¨÷∏∂®≤Ÿ◊˜¿‡–Õ
+		Selector selector = Selector.open();//Êé•Êî∂Á´ØÈúÄË¶ÅÊâìÂºÄÈÄâÊã©Âô®
+		dc.register(selector, SelectionKey.OP_READ);//Ê≥®ÂÜåÈÄâÊã©Âô®ÔºåÊåáÂÆöÊìç‰ΩúÁ±ªÂûã
 		
-		while(selector.select() > 0) {
+		while(true) {
+			if(selector.select(TIMEOUT) == 0) {System.out.println("...");continue;}
 			Iterator<SelectionKey> it = selector.selectedKeys().iterator();
 			while(it.hasNext()) {
 				SelectionKey sk = it.next();
-				
 				if(sk.isReadable()) {
-					ByteBuffer buf = ByteBuffer.allocate(1024);//∑÷≈‰ª∫≥Â«¯
+					ByteBuffer buf = ByteBuffer.allocate(1024);//ÂàÜÈÖçÁºìÂÜ≤Âå∫
 					dc.receive(buf);
-					//¥Ê-->»° flip
+					//Â≠ò-->Âèñ flip
 					buf.flip();
 					System.out.println(new String(buf.array(),0,buf.limit()));
 					buf.clear();
