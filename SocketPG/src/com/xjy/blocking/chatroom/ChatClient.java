@@ -1,6 +1,6 @@
-package com.xjy.blocking_chatdemo;
+package com.xjy.blocking.chatroom;
 /**
- * ´«Í³×èÈûÊ½SocketµÄ¿Í»§¶Ë£¬Ã¿¸ö¿Í»§¶ËÓĞÒ»¸ötextfieldÓÃÒÔ·¢ËÍÏûÏ¢,Ò»¸ötextAreaÓÃÒÔÏÔÊ¾ËùÓĞ¿Í»§¶ËÏò·şÎñÆ÷·¢ËÍµÄÏûÏ¢¡£
+ * ä¼ ç»Ÿé˜»å¡å¼Socketçš„å®¢æˆ·ç«¯ï¼Œæ¯ä¸ªå®¢æˆ·ç«¯æœ‰ä¸€ä¸ªtextfieldç”¨ä»¥å‘é€æ¶ˆæ¯,ä¸€ä¸ªtextAreaç”¨ä»¥æ˜¾ç¤ºæ‰€æœ‰å®¢æˆ·ç«¯å‘æœåŠ¡å™¨å‘é€çš„æ¶ˆæ¯ã€‚
  */
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
@@ -20,21 +20,21 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 public class ChatClient extends JFrame {
-	private String name = new String();//Ä£ÄâÓÃ»§Ãû³Æ
+	private String name = new String();//æ¨¡æ‹Ÿç”¨æˆ·åç§°
 	private static final long serialVersionUID = 1L;
-	private boolean connectState = true;//Ò»¿ªÊ¼Î´Á¬½ÓÉÏ
-	private boolean bConnected = true;//±íÊ¾´¦ÓÚÁ¬½Ó×´Ì¬
-	private DataOutputStream dos = null;//Êä³öÁ÷Ğ´³öÏûÏ¢
-	private DataInputStream dis = null;//ÊäÈëÁ÷¶ÁÈ¡ÏûÏ¢
-	private JTextField tf = new JTextField();//´ò×Ö´°¿Ú
-	private JTextArea ta = new JTextArea();//ÏÔÊ¾´°¿Ú
-	private Socket sc;//¿Í»§¶ËÌ×½Ó×Ö
+	private boolean connectState = true;//ä¸€å¼€å§‹æœªè¿æ¥ä¸Š
+	private boolean bConnected = true;//è¡¨ç¤ºå¤„äºè¿æ¥çŠ¶æ€
+	private DataOutputStream dos = null;//è¾“å‡ºæµå†™å‡ºæ¶ˆæ¯
+	private DataInputStream dis = null;//è¾“å…¥æµè¯»å–æ¶ˆæ¯
+	private JTextField tf = new JTextField();//æ‰“å­—çª—å£
+	private JTextArea ta = new JTextArea();//æ˜¾ç¤ºçª—å£
+	private Socket sc;//å®¢æˆ·ç«¯å¥—æ¥å­—
 
 	public static void main(String[] args) {
 		ChatClient cc = new ChatClient();
 		cc.init();
 	}
-     //»ñÈ¡ÏûÏ¢µÄRun·½·¨
+     //è·å–æ¶ˆæ¯çš„Runæ–¹æ³•
 	class InfoGetter implements Runnable{
 		@Override
 		public void run() {
@@ -53,11 +53,11 @@ public class ChatClient extends JFrame {
 		}
 		
 	}
-	//³õÊ¼»¯¹¤×÷
+	//åˆå§‹åŒ–å·¥ä½œ
 	public void init() {
 		Random rd = new Random();
-		this.name = "´úºÅ" + String.format("%010d",Math.abs(rd.nextInt()));
-		this.setTitle("Chating Room" + "      (ÄúµÄ´úºÅ£º" + name + ")");
+		this.name = "ä»£å·" + String.format("%010d",Math.abs(rd.nextInt()));
+		this.setTitle("Chating Room" + "      (æ‚¨çš„ä»£å·ï¼š" + name + ")");
 		this.setBounds(400, 300, 600, 400);
 		this.add(ta, BorderLayout.CENTER);
 		this.add(tf, BorderLayout.SOUTH);
@@ -73,7 +73,7 @@ public class ChatClient extends JFrame {
 		setVisible(true);
 		registerListener();
 		connect();
-		//¿ªÆô»ñÈ¡ÏûÏ¢µÄÏß³Ì
+		//å¼€å¯è·å–æ¶ˆæ¯çš„çº¿ç¨‹
 		new Thread(new InfoGetter()).start();
 	}
 
@@ -81,13 +81,13 @@ public class ChatClient extends JFrame {
 		while (connectState) {
 			try {
 				sc = new Socket("127.0.0.1", 8886);
-				dos = new DataOutputStream(sc.getOutputStream());//³õÊ¼»¯Êä³öÁ÷
-				dis = new DataInputStream(sc.getInputStream());//³õÊ¼»¯ÊäÈëÁ÷
-				System.out.println("success to connect the server£¡");
+				dos = new DataOutputStream(sc.getOutputStream());//åˆå§‹åŒ–è¾“å‡ºæµ
+				dis = new DataInputStream(sc.getInputStream());//åˆå§‹åŒ–è¾“å…¥æµ
+				System.out.println("success to connect the serverï¼");
 				connectState = false;
 			} catch (UnknownHostException e) {
 				e.printStackTrace();
-			} catch (ConnectException e) {//²¶»ñÁ¬½ÓÒì³££¬²¢³¢ÊÔÖØÁ¬
+			} catch (ConnectException e) {//æ•è·è¿æ¥å¼‚å¸¸ï¼Œå¹¶å°è¯•é‡è¿
 				System.out.println("trying to connect...");
 				try {
 					Thread.sleep(2000);
@@ -101,7 +101,7 @@ public class ChatClient extends JFrame {
 			}
 		}
 	}
-	//¶Ï¿ªÁ¬½Ó´¦Àí
+	//æ–­å¼€è¿æ¥å¤„ç†
 	public void disconnect() {
 		try {
 			if (dos != null)
@@ -112,7 +112,7 @@ public class ChatClient extends JFrame {
 			e.printStackTrace();
 		}
 	}
-	//Îªtextfield×¢²á»Ø³µÏÔÊ¾ÊÂ¼ş£ºÇå¿Õfield£¬·ÅÈëÊä³öÁ÷
+	//ä¸ºtextfieldæ³¨å†Œå›è½¦æ˜¾ç¤ºäº‹ä»¶ï¼šæ¸…ç©ºfieldï¼Œæ”¾å…¥è¾“å‡ºæµ
 	public void registerListener() {
 
 		tf.addActionListener(new ActionListener() {
