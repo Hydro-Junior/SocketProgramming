@@ -1,4 +1,4 @@
-package com.xjy.blocking.chatroom;
+package com.xjy.bio.chatroom;
 /**
  * 传统阻塞式socket编程，服务端
  */

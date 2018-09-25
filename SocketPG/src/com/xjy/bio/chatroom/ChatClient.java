@@ -1,4 +1,4 @@
-package com.xjy.blocking.chatroom;
+package com.xjy.bio.chatroom;
 /**
  * 传统阻塞式Socket的客户端，每个客户端有一个textfield用以发送消息,一个textArea用以显示所有客户端向服务器发送的消息。
  */

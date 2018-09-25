@@ -44,7 +44,7 @@ import java.util.*;
  *  同步非阻塞式NIO：通知已就绪，再处理。（Reactor："能读了告诉我"）
  * （异步非阻塞式AIO：属于NIO的更进一步，把读取操作交给操作系统，ProActor模式,"读好了再叫我"。）
  *
- *  多提一句，这里没有展示服务端handleWrite回写给客户端的情况，可能还会用到的Selectionkey的interestOps方法
+ *  多提一句，这里只是简单的模拟，并未考虑读写半包等复杂情况，另外demo重心在服务端，所以client写得比较简单，并未使用选择器。
  */
 public class Tcp {
     private static final int TIMEOUT = 6000;
